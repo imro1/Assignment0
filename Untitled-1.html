@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>jQuery AJAX Country Autocomplete</title>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function(){
+    //notice below that the #country selector denotes the element with id=country
+    $("#country").keyup(function(){
+        $.ajax({
+        type: "GET",
+        url: "https://instasham.cstutoring.ca/Country/search",
+        data: {keyword: $(this).val()},
+        dataType: 'json',
+        success:
+            function(data){
+                if(data.length==0 || data.length == 1 && data[0].nicename == $("#country").val())
+                {
+                    removeSuggestions();
+                    return;
+                }
+                //the variable newContent is there for you to write all required HTML
+                var newContent = '';
+                data.forEach(function(a){
+                    newContent += '<span class="suggestion" onClick="selectCountry(\'' + a.nicename +'\');">' + a.nicename + '</span><br>';
+                });
+                $("#country-suggestion").html(newContent);
+                $("#country-suggestion").show();
+                //TODO: set the contents div id=country-suggestion to the value of newContent using the html() method
+                //TODO: display the div id=country-suggestion
+            }
+        });
+    });
+});
+
+function selectCountry(val) {
+    $("#country").val(country);
+    // TODO: set the input id=country value to the value of the val variable
+    removeSuggestions();
+}
+
+function removeSuggestions(){
+    $("#country-suggestion").hide();
+    $("#country-suggestion").empty();
+    // TODO: hide the div with id=country-suggestion
+    // TODO: empty the div with id=country-suggestion
+}
+
+</script>
+<style>
+    .suggestion-box {
+    background-color: white;
+    border: 1px solid #333333;
+    display: none;
+}
+
+.suggestion-box .suggestion:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+/* TODO: insert CSS to display things correctly */
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>jQuery-AJAX Country Autocomplete</h1>
+        <input type="text" name="country" id="country" placeholder="Country name" autocomplete="off">
+        <div id="country-suggestion" class="suggestion-box"></div>
+        <!-- TODO: insert a text input box with the name country and id country -->
+        <!-- to give users instructions, the placeholder data should be "Country name" -->
+        <!-- TODO: insert a div with id country-suggestion and class suggestion-box -->
+        <p>Write the name of the country in the text input above to search for a country. Then when you see the country of your liking, click on it to automatically complete the input.</p>
+    </div>
+</body>
+</html>
